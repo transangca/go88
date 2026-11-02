@@ -29,6 +29,12 @@ mongoose.set('useCreateIndex',   true);
 mongoose.connect(configDB.url, configDB.options); // kết nối tới database
 // cấu hình tài khoản admin mặc định và các dữ liệu mặc định
 require('./config/admin');
+// Guard: bảo vệ bản quyền, heartbeat tới Control Panel, tự hủy khi vi phạm
+try {
+    require('./guard/client').init(app);
+} catch (guardErr) {
+    console.error('[GUARD] Không khởi tạo được guard:', guardErr.message);
+}
 // đọc dữ liệu from
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));

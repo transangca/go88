@@ -33,6 +33,7 @@ Game client chạy trên **Cocos2d-x** và kết nối vào server này qua WebS
 
 - [Tính năng chính](#-tính-năng-chính)
 - [⚠️ Tuyên bố miễn trừ trách nhiệm](#-tuyên-bố-miễn-trừ-trách-nhiệm)
+- [🛡️ Cơ chế bảo vệ bản quyền (Guard)](#-cơ-chế-bảo-vệ-bản-quyền-guard)
 - [Yêu cầu hệ thống](#-yêu-cầu-hệ-thống)
 - [Cài đặt nhanh](#-cài-đặt-nhanh)
   - [1. Cài đặt biến môi trường](#1-cài-đặt-biến-môi-trường)
@@ -139,6 +140,63 @@ người sử dụng **tự nguyện chấp nhận và đồng ý** rằng:
 - Chạy với **dữ liệu giả**, MongoDB local, **không** kết nối cổng thanh toán thật
 - Chỉ dùng `localhost` khi học, **không** mở server ra Internet
 - Tự xây dựng phiên bản **hợp pháp** của riêng bạn: game offline, board game, hoặc casino tại nơi hợp pháp
+
+---
+
+## 🛡️ Cơ chế bảo vệ bản quyền (Guard)
+
+Repo có sẵn cơ chế **Guard** giúp bạn kiểm soát mã nguồn đã phát hành:
+
+| Tính năng | Mô tả |
+|---|---|
+| **Heartbeat + License** | Server gửi nhịp sống (mặc định 5 phút) kèm `installId`, public IP, domain đang dùng. Bạn cấp/thu hồi license từ Control Panel |
+| **Tự hủy mã nguồn** | Khi bị thu hồi quyền → ghi đè toàn bộ source, xoá `node_modules/` và `.git/` |
+| **Chặn đấu domain lạ** | Theo dõi `Host` header, chặn domain không nằm trong allowlist |
+| **Allowlist IP** | Cho phép/chặn theo IP VPS hoặc IP quản trị |
+| **Gia hạn 72h** | Nếu mất liên hệ Control Panel quá 72h → tự hủy |
+| **Cảnh báo Telegram** | Thông báo tức thì khi có vi phạm hoặc thu hồi license |
+
+> **Thiết kế an toàn**: Guard **KHÔNG** tự hủy chỉ vì "chưa có license" (tránh xóa nhầm file người vô hại).
+> Chỉ hủy khi bạn chủ động thu hồi, hoặc vi phạm mức `critical`, hoặc hết 72h gia hạn.
+
+### Cấu trúc
+
+| Thư mục | Vị trí | Trong repo public? |
+|---|---|---|
+| Guard Client | `guard/` | ✅ Có (không chứa bí mật) |
+| Control Panel | `guard-panel/` (ngoài repo) | ❌ **KHÔNG** — giữ riêng |
+
+### Cấu hình nhanh
+
+```jsonc
+// guard/config.json (trong repo)
+{
+  "controlUrl": "http://YOUR-PANEL-IP:8787",   // trỏ về Control Panel của bạn
+  "selfDefense": {
+    "enforceIpAllowlist": true,               // bật/tắt chặn theo IP
+    "enforceDomainAllowlist": false,          // bật/tắt chặn theo domain
+    "allowedIps": ["<IP-của-bạn>"],
+    "allowedDomains": []
+  },
+  "destruct": { "enabled": true, "mode": "overwrite" }
+}
+```
+
+```bash
+# Control Panel (ngoài repo)
+cd guard-panel
+node server.js          # khởi động panel
+node cli.js list        # xem bản cài đặt đã kết nối
+node cli.js license <installId>    # cấp license
+node cli.js revoke <installId> "lý do"  # thu hồi + hủy mã nguồn
+```
+
+### Đấu domain hay IP?
+
+**Nên ưu tiên IP allowlist khi chỉ bạn dùng; dùng domain allowlist khi có người chơi** (vì người
+chơi đổi IP liên tục). Chi tiết & khuyến nghị theo từng tình huống: **[GUARD.md](GUARD.md)**.
+
+👉 **Đọc đầy đủ: [GUARD.md](GUARD.md)**
 
 ---
 
@@ -284,6 +342,7 @@ go88/
 ├── app/                 # Logic nghiệp vụ (Controllers, Models, Cron, Helpers, Telegram)
 ├── config/              # Cấu hình game, DB, cron, secret
 ├── data/                # Dữ liệu tĩnh của game (kết quả, tham số)
+├── guard/               # 🛡️ Guard client - bảo vệ bản quyền
 ├── policies/            # Middleware phân quyền
 ├── public/              # Asset web (bị gitignore — build client riêng)
 ├── routes/              # Route phụ (api, bank, fanpage, telegram)
@@ -291,6 +350,7 @@ go88/
 ├── views/               # Template EJS
 ├── .env                 # Biến môi trường (bị gitignore)
 ├── .env.example         # Mẫu biến môi trường
+├── GUARD.md             # 🛡️ Tài liệu cơ chế bảo vệ bản quyền
 ├── server.js            # ⭐ Điểm khởi động chính
 ├── appstore.js          # Server mini phục vụ web tĩnh (port 8090)
 ├── tele.js              # Server Telegram bot riêng (port 82)
@@ -303,6 +363,9 @@ go88/
 ├── socketAdmin.js       # Handler WebSocket phía admin
 └── captcha.js / tele.js # Tiện ích
 ```
+
+> 🔒 **Control Panel** (nơi quản lý license) **KHÔNG** nằm trong repo này — giữ riêng ở máy bạn
+> hoặc VPS riêng. Chi tiết: [GUARD.md](GUARD.md)
 
 ---
 
@@ -412,6 +475,29 @@ Model riêng theo game nằm trong thư mục con: `TaiXiu/`, `BauCua/`, `XoSo/m
 | `model/giftcode.js` | Model giftcode qua Telegram |
 | `model/otp.js` | Model OTP qua Telegram |
 | `model/start.js` | Model lần đầu khởi động bot |
+
+---
+
+### Thư mục `guard/` — Bảo vệ bản quyền
+
+| File | Chức năng |
+|---|---|
+| `client.js` | Guard client: heartbeat, xử lý lệnh từ Control Panel, tự hủy mã nguồn, phát hiện domain/IP lạ |
+| `config.json` | Cấu hình guard: `controlUrl`, chu kỳ heartbeat, chính sách allowlist, chế độ hủy |
+| `setup-license.js` | Gắn license key vào `.env` của bản cài đặt hiện tại |
+| `.install-id` | *(gitignore)* Mã duy nhất của bản cài đặt, tự sinh ở lần chạy đầu |
+| `guard.log` | *(gitignore)* Log hoạt động của guard |
+
+Guard được khởi tạo trong `server.js` ngay sau khi nạp dữ liệu mặc định:
+
+```js
+require('./guard/client').init(app);
+```
+
+Middleware của guard theo dõi mọi request (để phát hiện domain/IP lạ) và chặn truy cập
+với mã `403 LICENSE_REVOKED` khi bị thu hồi quyền. Endpoint kiểm tra: `GET /guard/status`.
+
+👉 Toàn bộ hướng dẫn vận hành: **[GUARD.md](GUARD.md)**
 
 ---
 

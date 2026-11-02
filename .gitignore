@@ -25,6 +25,11 @@ logs/
 tmp/
 *.pid
 
+# Guard - dữ liệu bản cài đặt & log
+guard/.install-id
+guard/guard.log
+guard/*.local.json
+
 # OS / editor
 .DS_Store
 Thumbs.db
