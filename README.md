@@ -3,6 +3,27 @@
 Server game bài/đá (tài xỉu, bầu cúa, xóc xóc, hũ…) viết bằng **Node.js + Express + MongoDB + Socket.IO**.
 Game client chạy trên **Cocos2d-x** và kết nối vào server này qua WebSocket.
 
+> ## 🚫 TUYÊN BỐ MIỄN TRỪ TRÁCH NHIỆM
+>
+> **Mã nguồn này CHỈ ĐƯỢC DÙNG ĐỂ HỌC TẬP, NGHIÊN CỨU KỸ THUẬT — HỌC CÁCH CÁC NHÀ CÁI
+> VẬN HÀNH (kiến trúc server, mô hình cược/hũ, đại lý, tích hợp thanh toán, quản trị).**
+>
+> **TUYỆT ĐỐI KHÔNG ĐƯỢC** dùng để mở hay vận hành website cá cược trực tuyến, cờ bạc, đánh bạc;
+> không được thuê/bán/cho thuê/chia sẻ server hoặc mã nguồn cho bất kỳ ai; không được kết nối với cổng
+> thanh toán, ví điện tử hay dịch vụ tài chính nhằm mục đích cá cược.
+>
+> Tại Việt Nam, các hành vi trên vi phạm **Bộ luật Hình sự 2015 (Điều 325, 326, 327)**, Nghị định
+> 06/2023/NĐ-CP, Nghị định 36/2020/NĐ-CP và Luật Phòng, chống tệ nạn đánh bạc 2023 — có thể bị trừ phạt
+> tùy và xử lý hình sự.
+>
+> **Bằng việc tải về / clone / fork / chạy mã nguồn này, bạn đã tự nguyện chấp nhận và đồng ý chịu trách
+> nhiệm hoàn toàn về mọi hành vi của mình trước pháp luật. Chủ sở hữu kho mã nguồn KHÔNG CHỊU TRÁCH NHIỆM
+> cho bất kỳ thiệt hại, khiếu nại hay hình sự nào phát sinh từ việc sử dụng mã nguồn này.**
+>
+> 👉 **Đọc đầy đủ: [DISCLAIMER.md](DISCLAIMER.md)**
+
+---
+
 > ⚠️ **Lưu ý bảo mật**: Repo này được public. Trước khi đưa vào vận hành thật, hãy đổi toàn bộ
 > secret/token/API key mặc định (xem [Bảo mật](#-bảo-mật--rotate-secret)).
 
@@ -11,6 +32,7 @@ Game client chạy trên **Cocos2d-x** và kết nối vào server này qua WebS
 ## 📑 Mục lục
 
 - [Tính năng chính](#-tính-năng-chính)
+- [⚠️ Tuyên bố miễn trừ trách nhiệm](#-tuyên-bố-miễn-trừ-trách-nhiệm)
 - [Yêu cầu hệ thống](#-yêu-cầu-hệ-thống)
 - [Cài đặt nhanh](#-cài-đặt-nhanh)
   - [1. Cài đặt biến môi trường](#1-cài-đặt-biến-môi-trường)
@@ -53,6 +75,70 @@ Game client chạy trên **Cocos2d-x** và kết nối vào server này qua WebS
 | **Bot tự động** | Bot đặt cược ảo cho các game hũ (`app/Cron/bot_hu/`), bot chat Tài Xỉu |
 | **Telegram bot** | Bot quản lý tài khoản, giftcode, OTP, chuyển tiền |
 | **Cron job** | Reset hũ 00:00, lấy kết quả Xổ Số MB 18:00 & 18:35 (Asia/Ho_Chi_Minh) |
+
+---
+
+## ⚠️ Tuyên bố miễn trừ trách nhiệm
+
+### Phạm vi sử dụng được phép
+
+Mã nguồn này được phát hành **chỉ để học tập, nghiên cứu và tham khảo kỹ thuật** — tập trung vào việc
+hiểu **quy trình vận hành và kiến trúc hệ thống của các nhà cái trực tuyến**: cách tổ chức model dữ liệu,
+cách chạy vòng lặp game (chia bài – đóng bài – trả thưởng), cách quản lý hũ jackpot, cách vận hành bot đặt
+cược, cách quản lý đại lý, cách tích hợp cổng thanh toán, cách xây dựng admin panel và quản lý quyền.
+
+### Những điều bị cấm tuyệt đối
+
+- ❌ Mở, vận hành, phát triển hoặc kiểm thử website **cá cược trực tuyến / cờ bạc / đánh bạc**
+- ❌ Cung cấp dịch vụ đặt cược, cá cược cho bất kỳ người nào
+- ❌ Bán, cho thuê, tặng, chia sẻ, host, cung cấp VPS hoặc "white label" mã nguồn/server cho đơn vị khác
+- ❌ Kết nối hệ thống với **cổng thanh toán, ví điện tử, ngân hàng, dịch vụ thẻ cào** nhằm mục đích cá cược
+- ❌ Tính tiền thật, quy đổi tiền thật, rút tiền thật cho người chơi
+- ❌ Tuyển đại lý / marketing nền tảng cá cược
+- ❌ Sử dụng thương mại mà không có **văn bản cho phép bằng văn bản** từ chủ sở hữu
+- ❌ Sử dụng cho mục đích phi pháp (lừa đảo, rửa tiền, tấn công mạng…)
+
+### Cơ sở pháp lý tại Việt Nam
+
+| Hành vi | Căn cứ pháp lý |
+|---|---|
+| Tổ chức, cung cấp dịch vụ cá cược trực tuyến | **BLHS 2015 – Điều 325** |
+| Cổng bình chọn, đánh bạc trên không gian mạng | **BLHS 2015 – Điều 326** |
+| Cung cấp dịch vụ cờ bạc trên không gian mạng | **BLHS 2015 – Điều 327** |
+| Mở đường cho trò chơi có yếu tố may rủi, cờ bạc trên mạng | **Nghị định 06/2023/NĐ-CP**, **Nghị định 147/2024/NĐ-CP** |
+| Tổ chức đánh bạc, lập đường đánh bạc | **BLHS 2015 – Điều 316, 317**; **Nghị định 36/2020/NĐ-CP** |
+| Phòng, chống tệ nạn đánh bạc | **Luật Phòng, chống tệ nạn đánh bạc 2023 (Luật 14/2023/QH15)** |
+
+> ⚠️ Đây là hành vi **bị trừ phạt hình sự**, không chỉ phạt hành chính.
+
+### Miễn trừ trách nhiệm
+
+Bằng việc **tải về, clone, fork, sao chép, cài đặt, chạy hoặc sử dụng** bất kỳ phần nào của mã nguồn này,
+người sử dụng **tự nguyện chấp nhận và đồng ý** rằng:
+
+- Chủ sở hữu kho mã nguồn **không chịu trách nhiệm** cho bất kỳ hành vi nào của người sử dụng
+- Chủ sở hữu **không chịu trách nhiệm** cho bất kỳ thiệt hại nào phát sinh (tài chính, uy tín, pháp lý,
+  mất dữ liệu, gián đoạn kinh doanh…)
+- Mã nguồn được cung cấp **"NGUYÊN TRẠNG (AS-IS)"** — không kèm bảo đảm dưới bất kỳ hình thức nào
+- Người sử dụng **hoàn toàn chịu trách nhiệm** tuân thủ pháp luật tại nơi cư trú và nơi vận hành
+- Mọi tranh chấp thuộc thẩm quyền của **Tòa án nơi chủ sở hữu trụ sở**
+
+👉 **Đọc đầy đủ điều khoản: [DISCLAIMER.md](DISCLAIMER.md)**
+
+### Khuyến nghị khi học tập
+
+```jsonc
+// config/sys.json — tắt toàn bộ tính năng tiền thật khi đang học
+{
+  "bank": false,      // tắt nạp qua ngân hàng
+  "transfer": false,  // tắt chuyển tiền
+  "daily": false      // tắt tổng hợp đại lý
+}
+```
+
+- Chạy với **dữ liệu giả**, MongoDB local, **không** kết nối cổng thanh toán thật
+- Chỉ dùng `localhost` khi học, **không** mở server ra Internet
+- Tự xây dựng phiên bản **hợp pháp** của riêng bạn: game offline, board game, hoặc casino tại nơi hợp pháp
 
 ---
 
@@ -695,6 +781,11 @@ pm2 logs go88 --lines 50                # xem log khởi động
 ## 📄 License
 
 ISC — dựa trên [RedVip](https://github.com/MrT98/RedVip) của MrT98.
+
+## 📩 Liên hệ
+
+Cần **văn bản cho phép bằng văn bản** để sử dụng mã nguồn cho mục đích thương mại? Liên hệ chủ sở hữu
+qua kho mã nguồn trước khi triển khai bất kỳ hoạt động nào.
 
 ---
 
